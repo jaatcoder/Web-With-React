@@ -1,29 +1,96 @@
-import './App.css';
-import { ProductCard } from './ProductCard';
-import { Products } from './ProductList';
+import { Fragment } from "react";
+import { ProductList } from "./ProductList";
+import { ProductCard } from "./ProductCard";
+import "./App.css";
 
+const styles=
+{
+  ListDivider:
+  {
+    borderColor: "slategray" 
+  },
+  ListTitle:
+  {
+     margin: "8px 0" 
+
+  }
+}
 function App() {
-  
+  const products = [
+    {
+      imageSrc: "images/apple-iphone-15-pro-1.jpg",
+      title: "iPhone 15 Pro",
+      specification: [
+        "A17 Pro chip with 6-core GPU",
+        "3x or 5x Telephoto camera",
+        "Up to 29 hours video playback",
+      ],
+      stockCount: 10,
+      price: 999,
+    },
+    {
+      imageSrc: "images/MacBook-Pro-16-inch-M3-Pro-price-in-Bangladesh.webp",
+      title: "AirPods Pro 2",
+      specification: [
+        "Noise Cancellation",
+        "Dust, sweat, and water resistant",
+        "Up to 6 hours of listening",
+      ],
+      stockCount: 0,
+      price: 249,
+    },
+    {
+      imageSrc: "images/samsung-galaxy-s24-ultra.jpg",
+      title: "Apple Watch 9",
+      specification: [
+        "45mm or 41mm case size",
+        "Always-On Retina display",
+        "Up to 18 hours normal use",
+      ],
+      stockCount: 6,
+      price: 399,
+    },
+  ];
+
   function handlePurchase(product) {
-    alert(`You want to purchase ${product.name} for $${product.price}`);
+    alert(`You clicked on ${product.title} which cost $${product.price}`);
   }
 
   return (
     <div className="App">
-      <h1>Our Products</h1>
-      <div className="products-container">
-        {
-           Products.map((product, index) => (
-          <ProductCard 
-            ky={index}
-            name={product.name}
-            image={product.image}
-            specifications={product.specifications}
-            price={product.price}
+      <ProductList>
+        {products.map((product) => (
+          <ProductCard
+            key={product.title}
+            product={product}
             onPurchase={handlePurchase}
           />
         ))}
-      </div>
+      </ProductList>
+
+      <h2>Product which cost up to $500</h2>
+      {products
+        .filter(({ price }) => price < 500)
+        .map(({ title, price }) => (
+          <Fragment key={title}>
+            <hr style={{ borderColor: "slategray" }} />
+            <p style={{ margin: "8px 0" }}>
+              {title} cost ${price}
+            </p>
+          </Fragment>
+        ))}
+
+      <h2>Products over $500</h2>
+      {products
+        .filter(({ price }) => price > 500)
+        .map(({ title, price }) => (
+          <Fragment key={title}>
+            <hr style={styles.ListDivider} />
+            <p style={styles.ListTitle}>
+              {title} costs ${price}
+            </p>
+          </Fragment>
+        ))}
     </div>
   );
 }
